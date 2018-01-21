@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+import json
 
 from keras.layers import Dense, Activation, BatchNormalization, InputLayer, Dropout
 from keras.models import Sequential
@@ -79,12 +80,28 @@ def perceptron(data_set, number_of_epoch, hidden_neurons=((NUMBER_HIDDEN_NEURONS
                             fit_dict[opt][act][use_batch_norm][layers][train_limit][e] = dict()
                             for k, v in h.history.items():
                                 fit_dict[opt][act][use_batch_norm][layers][train_limit][e][k] = v[i]
-    return df, fit_dict
+    fit_dict_index = {'optimizer': 0,
+                      'activation': 1,
+                      'use_batch_norm': 2,
+                      'layers': 3,
+                      'train_limit': 4,
+                      'epoch': 5,
+                      'score_type': 6}
+    return df, fit_dict, fit_dict_index
 
 
 if __name__ == "__main__":
-    dff, tt = perceptron("iris", 10, ((10,), (10, 5)))
+    data_set_name = "creditcard"
+    dff, tt, tti = perceptron(data_set_name,
+                              number_of_epoch=600,
+                              hidden_neurons=((), (15,), (10,), (5,), (10, 5), (15, 5)),
+                              use_batch_norm_values=(True, False),
+                              optimizer_values=('rmsprop', 'adam'),
+                              activation_values=('sigmoid', 'relu', 'linear', 'selu'),
+                              training_sizes=(-1,) + tuple(range(500, 10000, 500))
+                              )
     if not os.path.exists("stats"):
         os.makedirs("stats")
-    cdd = consolidate_dict_data(tt, 5, 6, 0)
-    dff.to_csv(path_or_buf="stats/per_iris.csv")
+    dff.to_csv(path_or_buf="stats/per_" + data_set_name + ".csv")
+    json.dump(tt, open("stats/per_" + data_set_name + "_dict.json", 'w'))
+    json.dump(tti, open("stats/per_" + data_set_name + "_dict_indexes.json", 'w'))

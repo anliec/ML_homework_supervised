@@ -78,7 +78,7 @@ def get_data(data_set, batch_format):
 
 
 def consolidate_dict_data(dict_data, consolidate_argx, consolidate_argy, consolidate_argz,
-                          argx_name="arg_x", argy_name="arg_y"):
+                          argx_name="arg_x", argy_name="arg_y", filters=None):
     consolidate_dict = dict()
     for keys, values in dict_explore(dict_data):
         arg_x = keys[consolidate_argx]
@@ -89,7 +89,8 @@ def consolidate_dict_data(dict_data, consolidate_argx, consolidate_argy, consoli
             consolidate_dict[arg_z] = dict()
         if arg_xy not in consolidate_dict[arg_z]:
             consolidate_dict[arg_z][arg_xy] = list()
-        consolidate_dict[arg_z][arg_xy].append(values)
+        if filters is None or are_keys_on_filters(keys, filters):
+            consolidate_dict[arg_z][arg_xy].append(values)
     
     return_dict = dict()
     for arg_z, d in consolidate_dict.items():
@@ -105,6 +106,13 @@ def consolidate_dict_data(dict_data, consolidate_argx, consolidate_argy, consoli
         df = pd.DataFrame(data, columns=[argx_name, argy_name, "mean", "median", "std", "min", "max"])
         return_dict[arg_z] = df
     return return_dict
+
+
+def are_keys_on_filters(keys, filters):
+    for key_index, key_value in filters:
+        if keys[key_index] != key_value:
+            return False
+    return True
 
 
 def dict_explore(dict_data, keys=None):
