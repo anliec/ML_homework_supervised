@@ -21,22 +21,23 @@ def knn(data_set, n_neighbors_values=(5,), p_values=(2,), training_sizes=(-1,)):
         data_dict[n_neighbors] = {}
         for p in p_values:
             data_dict[n_neighbors][p] = {}
-            for train_size in training_sizes:
+            for train_limit in training_sizes:
                 clf = KNeighborsClassifier(n_neighbors=n_neighbors,
                                            p=p,
                                            weights='uniform',
                                            n_jobs=-1)
-                clf.fit(X=np.array(x_train[:train_size]),
-                        y=np.array(y_train[:train_size]).ravel())
+                clf.fit(X=np.array(x_train[:train_limit]),
+                        y=np.array(y_train[:train_limit]).ravel())
                 score = clf.score(X=x_test,
                                   y=y_test.ravel())
-                data.append((score, n_neighbors, p, train_size))
-                data_dict[n_neighbors][p][train_size] = score
+                data.append((score, n_neighbors, p, train_limit))
+                data_dict[n_neighbors][p][train_limit] = {'score': score}
 
-    data_frame = pd.DataFrame(data, columns=["score", "n_neighbors", "p", "train_size"])
+    data_frame = pd.DataFrame(data, columns=["score", "n_neighbors", "p", "train_limit"])
     data_dict_indexes = {'n_neighbors': 0,
                          'p': 1,
-                         'train_size': 2}
+                         'train_limit': 2,
+                         'score_type': 3}
     return data_frame, data_dict, data_dict_indexes
 
 

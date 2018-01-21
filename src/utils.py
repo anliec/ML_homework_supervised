@@ -33,8 +33,8 @@ def get_data(data_set, batch_format):
                                                             test_size=VALIDATION_SPLIT,
                                                             shuffle=True)
         # limit the train set to 10 000 values
-        x_train = x_train[0:10000]
-        y_train = y_train[0:10000]
+        x_train = x_train[0:100000]
+        y_train = y_train[0:100000]
         # set the train set 50% of each class
         x_test_small = []
         y_test_small = []
@@ -71,7 +71,21 @@ def get_data(data_set, batch_format):
             y_test = to_categorical(y_test)
     print("Selected data set is", data_set, "with", len(y_train) + len(y_test),
           "data (train:", len(y_train), ", test:", len(y_test), ")")
-    return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test)
+    # normalize input data
+    x_train, x_test = normalize_x_data(np.array(x_train), np.array(x_test))
+    return x_train, np.array(y_train), x_test, np.array(y_test)
+
+
+def normalize_x_data(x_train, x_test):
+    # compute normalization on training set only
+    x_min = np.min(x_train, axis=0)
+    x_max = np.max(x_train, axis=0)
+    # apply the same transform on both datasets
+    epsilon = 0.0001
+    x_train[:] = x_train[:] - x_min / (x_max - x_min + epsilon)
+    x_test[:] = x_test[:] - x_min / (x_max - x_min + epsilon)
+
+    return x_train, x_test
 
 
 # data management tools
@@ -110,8 +124,12 @@ def consolidate_dict_data(dict_data, consolidate_argx, consolidate_argy, consoli
 
 def are_keys_on_filters(keys, filters):
     for key_index, key_value in filters:
-        if keys[key_index] != key_value:
-            return False
+        try:
+            if keys[key_index] not in key_value:
+                return False
+        except TypeError:
+            if keys[key_index] != key_value:
+                return False
     return True
 
 
@@ -125,6 +143,18 @@ def dict_explore(dict_data, keys=None):
             keys.pop()
     else:
         yield keys, dict_data
+
+
+def to_seaborn_dataframe(consolidate_dict, wanted_value='median', value_name='median', consolidate_z_name='argz'):
+    df = pd.DataFrame()
+    for k, v in consolidate_dict.items():
+        tmp = pd.DataFrame(data=v.get([v.columns[0], v.columns[1], wanted_value]),
+                           columns=[v.columns[0], v.columns[1], value_name])
+        tmp = tmp.assign(argz=[k] * len(tmp))
+        tmp.rename(columns={'argz': consolidate_z_name}, inplace=True)
+        df = df.append(tmp)
+        df.columns = tmp.columns
+    return df
 
 
 # first data set tools

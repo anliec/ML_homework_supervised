@@ -32,12 +32,13 @@ def tree(data_set, max_depth_values=(None,), min_samples_split_values=(2,), trai
                 score = clf.score(X=x_test,
                                   y=y_test)
                 data.append((score, max_depth, min_samples_split, train_limit))
-                data_dict[max_depth][min_samples_split][train_limit] = score
+                data_dict[max_depth][min_samples_split][train_limit] = {'score': score}
 
     data_frame = pd.DataFrame(data, columns=["score", "max_depth", "min_sample_split", "train_size"])
     data_dict_indexes = {'max_depth': 0,
                          'min_samples_split': 1,
-                         'train_limit': 2}
+                         'train_limit': 2,
+                         'score_type': 3}
     return data_frame, data_dict, data_dict_indexes
 
 

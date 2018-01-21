@@ -21,20 +21,21 @@ def svm(data_set, c_values=(1.0,), kernel_values=('rbf',), trainning_size=(-1,))
         data_dict[c] = {}
         for kernel in kernel_values:
             data_dict[c][kernel] = {}
-            for train_size in trainning_size:
+            for train_limit in trainning_size:
                 clf = SVC(C=c,
                           kernel=kernel)
-                clf.fit(X=np.array(x_train[:train_size]),
-                        y=np.array(y_train[:train_size]).ravel())
+                clf.fit(X=np.array(x_train[:train_limit]),
+                        y=np.array(y_train[:train_limit]).ravel())
                 score = clf.score(X=x_test,
                                   y=y_test.ravel())
-                data.append((score, c, kernel, train_size))
-                data_dict[c][kernel][train_size] = score
+                data.append((score, c, kernel, train_limit))
+                data_dict[c][kernel][train_limit] = {'score': score}
 
-    data_frame = pd.DataFrame(data, columns=["score", "c", "kernel", "train_size"])
+    data_frame = pd.DataFrame(data, columns=["score", "c", "kernel", "train_limit"])
     data_dict_indexes = {'c': 0,
                          'kernel': 1,
-                         'train_size': 2}
+                         'train_limit': 2,
+                         'score_type': 3}
     return data_frame, data_dict, data_dict_indexes
 
 
