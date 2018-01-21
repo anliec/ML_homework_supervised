@@ -25,9 +25,9 @@ def svm(data_set, c_values=(1.0,), kernel_values=('rbf',), trainning_size=(-1,))
                 clf = SVC(C=c,
                           kernel=kernel)
                 clf.fit(X=np.array(x_train[:train_size]),
-                        y=np.array(y_train[:train_size]))
+                        y=np.array(y_train[:train_size]).ravel())
                 score = clf.score(X=x_test,
-                                  y=y_test)
+                                  y=y_test.ravel())
                 data.append((score, c, kernel, train_size))
                 data_dict[c][kernel][train_size] = score
 

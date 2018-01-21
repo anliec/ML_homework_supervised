@@ -27,9 +27,9 @@ def knn(data_set, n_neighbors_values=(5,), p_values=(2,), training_sizes=(-1,)):
                                            weights='uniform',
                                            n_jobs=-1)
                 clf.fit(X=np.array(x_train[:train_size]),
-                        y=np.array(y_train[:train_size]))
+                        y=np.array(y_train[:train_size]).ravel())
                 score = clf.score(X=x_test,
-                                  y=y_test)
+                                  y=y_test.ravel())
                 data.append((score, n_neighbors, p, train_size))
                 data_dict[n_neighbors][p][train_size] = score
 

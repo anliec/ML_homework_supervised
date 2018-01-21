@@ -31,9 +31,9 @@ def boost(data_set, max_depth_values=(5,), n_estimators_values=(100,), min_sampl
                                                      min_samples_split=min_sample_split
                                                      )
                     clf.fit(X=np.array(x_train[:train_size]),
-                            y=np.array(y_train[:train_size]))
+                            y=np.array(y_train[:train_size]).ravel())
                     score = clf.score(X=x_test,
-                                      y=y_test)
+                                      y=y_test.ravel())
                     data.append((score, max_depth, n_estimators, min_sample_split, train_size))
                     data_dict[max_depth][n_estimators][min_sample_split][train_size] = score
 
