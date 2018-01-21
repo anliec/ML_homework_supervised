@@ -71,7 +71,7 @@ def get_data(data_set, batch_format):
             y_test = to_categorical(y_test)
     print("Selected data set is", data_set, "with", len(y_train) + len(y_test),
           "data (train:", len(y_train), ", test:", len(y_test), ")")
-    return x_train, y_train, x_test, y_test
+    return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test)
 
 
 # data management tools
