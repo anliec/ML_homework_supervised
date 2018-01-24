@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
-import json
+import pickle
 
 from keras.layers import Dense, Activation, BatchNormalization, InputLayer, Dropout
 from keras.models import Sequential
@@ -103,5 +103,7 @@ if __name__ == "__main__":
     if not os.path.exists("stats"):
         os.makedirs("stats")
     dff.to_csv(path_or_buf="stats/per_" + data_set_name + ".csv")
-    json.dump(tt, open("stats/per_" + data_set_name + "_dict.json", 'w'))
-    json.dump(tti, open("stats/per_" + data_set_name + "_dict_indexes.json", 'w'))
+    with open("stats/per_" + data_set_name + "_dict.pikle", 'wb') as handle:
+        pickle.dump(tt, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("stats/per_" + data_set_name + "_dict_indexes.pikle", 'wb') as handle:
+        pickle.dump(tti, handle, protocol=pickle.HIGHEST_PROTOCOL)

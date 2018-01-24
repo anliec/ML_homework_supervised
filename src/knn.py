@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
-import json
+import pickle
 from sklearn.neighbors import KNeighborsClassifier
 
 from src.utils import get_data
@@ -50,5 +50,7 @@ if __name__ == "__main__":
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/knn_" + data_set_name + ".csv")
-    json.dump(dd, open("stats/knn_" + data_set_name + "_dict.json", 'w'))
-    json.dump(ddi, open("stats/knn_" + data_set_name + "_dict_indexes.json", 'w'))
+    with open("stats/knn_" + data_set_name + "_dict.pikle", 'wb') as handle:
+        pickle.dump(dd, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("stats/knn_" + data_set_name + "_dict_indexes.pikle", 'wb') as handle:
+        pickle.dump(ddi, handle, protocol=pickle.HIGHEST_PROTOCOL)

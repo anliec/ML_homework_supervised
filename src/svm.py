@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
-import json
+import pickle
 from sklearn.svm import SVC
 
 from src.utils import get_data
@@ -51,6 +51,8 @@ if __name__ == "__main__":
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/svm_" + data_set_name + ".csv")
-    json.dump(dd, open("stats/svm_" + data_set_name + "_dict.json", 'w'))
-    json.dump(ddi, open("stats/svm_" + data_set_name + "_dict_indexes.json", 'w'))
+    with open("stats/svm_" + data_set_name + "_dict.pikle", 'wb') as handle:
+        pickle.dump(dd, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("stats/svm_" + data_set_name + "_dict_indexes.pikle", 'wb') as handle:
+        pickle.dump(ddi, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
