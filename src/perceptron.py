@@ -91,14 +91,14 @@ def perceptron(data_set, number_of_epoch, hidden_neurons=((NUMBER_HIDDEN_NEURONS
 
 
 if __name__ == "__main__":
-    data_set_name = "starcraft"
+    data_set_name = "creditcard"
     dff, tt, tti = perceptron(data_set_name,
                               number_of_epoch=600,
-                              hidden_neurons=((), (35,), (25,), (15,), (30, 10), (20, 10)),
+                              hidden_neurons=((), (15,), (10,), (5,), (15, 5), (10, 5)),
                               use_batch_norm_values=(True, False),
                               optimizer_values=('rmsprop',),
                               activation_values=('sigmoid', 'relu', 'linear', 'selu'),
-                              training_sizes=range(1000, 2000, 100)
+                              training_sizes=range(10000, 210000, 50000)
                               )
     if not os.path.exists("stats"):
         os.makedirs("stats")
