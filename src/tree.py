@@ -32,7 +32,7 @@ def tree(data_set, max_depth_values=(None,), min_samples_split_values=(2,), trai
                 train_score = clf.score(X=np.array(x_train[:train_limit]),
                                         y=np.array(y_train[:train_limit]))
                 test_score = clf.score(X=x_test,
-                                  y=y_test)
+                                       y=y_test)
                 data.append((test_score, train_score, max_depth, min_samples_split, train_limit))
                 data_dict[max_depth][min_samples_split][train_limit] = {'score': test_score,
                                                                         'train_score': train_score}
@@ -48,9 +48,9 @@ def tree(data_set, max_depth_values=(None,), min_samples_split_values=(2,), trai
 if __name__ == "__main__":
     data_set_name = "creditcard"
     df, dd, ddi = tree(data_set_name,
-                       max_depth_values=[30, 35, 40],
-                       min_samples_split_values=[2, 3, 4],
-                       training_sizes=[-1])
+                       max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 10)),
+                       min_samples_split_values=range(2, 20, 5),
+                       training_sizes=range(10000, 213605, 50000))
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/tree_" + data_set_name + ".csv")
