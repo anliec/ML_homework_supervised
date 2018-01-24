@@ -46,7 +46,7 @@ def tree(data_set, max_depth_values=(None,), min_samples_split_values=(2,), trai
 
 
 if __name__ == "__main__":
-    data_set_name = "creditcard"
+    data_set_name = "starcraft"
     df, dd, ddi = tree(data_set_name,
                        max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 10)),
                        min_samples_split_values=range(2, 20, 5),
