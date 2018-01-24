@@ -33,8 +33,8 @@ def get_data(data_set, batch_format):
                                                             test_size=VALIDATION_SPLIT,
                                                             shuffle=True)
         # limit the train set to 10 000 values
-        x_train = x_train[0:100000]
-        y_train = y_train[0:100000]
+        # x_train = x_train[0:100000]
+        # y_train = y_train[0:100000]
         # set the train set 50% of each class
         x_test_small = []
         y_test_small = []
@@ -99,11 +99,11 @@ def consolidate_dict_data(dict_data, consolidate_argx, consolidate_argy, consoli
         arg_y = keys[consolidate_argy]
         arg_z = keys[consolidate_argz]
         arg_xy = (arg_x, arg_y)
-        if arg_z not in consolidate_dict:
-            consolidate_dict[arg_z] = dict()
-        if arg_xy not in consolidate_dict[arg_z]:
-            consolidate_dict[arg_z][arg_xy] = list()
         if filters is None or are_keys_on_filters(keys, filters):
+            if arg_z not in consolidate_dict:
+                consolidate_dict[arg_z] = dict()
+            if arg_xy not in consolidate_dict[arg_z]:
+                consolidate_dict[arg_z][arg_xy] = list()
             consolidate_dict[arg_z][arg_xy].append(values)
     
     return_dict = dict()

@@ -32,12 +32,15 @@ def boost(data_set, max_depth_values=(5,), n_estimators_values=(100,), min_sampl
                                                      )
                     clf.fit(X=np.array(x_train[:train_limit]),
                             y=np.array(y_train[:train_limit]).ravel())
-                    score = clf.score(X=x_test,
-                                      y=y_test.ravel())
-                    data.append((score, max_depth, n_estimators, min_sample_split, train_limit))
-                    data_dict[max_depth][n_estimators][min_sample_split][train_limit] = {'score': score}
+                    train_score = clf.score(X=np.array(x_train[:train_limit]),
+                                            y=np.array(y_train[:train_limit]))
+                    test_score = clf.score(X=x_test,
+                                           y=y_test.ravel())
+                    data.append((test_score, train_score, max_depth, n_estimators, min_sample_split, train_limit))
+                    data_dict[max_depth][n_estimators][min_sample_split][train_limit] = {'score': test_score,
+                                                                                         'train_score': train_score}
 
-    data_frame = pd.DataFrame(data, columns=["score", "max_depth", "n_estimators", "min_sample_split", "train_limit"])
+    data_frame = pd.DataFrame(data, columns=["score", "train_score", "max_depth", "n_estimators", "min_sample_split", "train_limit"])
     data_dict_indexes = {'max_depth': 0,
                          'n_estimators': 1,
                          'min_sample_split': 2,
