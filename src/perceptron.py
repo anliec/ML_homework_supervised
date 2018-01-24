@@ -96,7 +96,7 @@ if __name__ == "__main__":
                               number_of_epoch=600,
                               hidden_neurons=((), (35,), (25,), (15,), (30, 10), (20, 10)),
                               use_batch_norm_values=(True, False),
-                              optimizer_values=('rmsprop'),
+                              optimizer_values=('rmsprop',),
                               activation_values=('sigmoid', 'relu', 'linear', 'selu'),
                               training_sizes=range(1000, 2000, 100)
                               )
