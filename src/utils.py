@@ -5,6 +5,7 @@ from collections import defaultdict, OrderedDict
 from sklearn.datasets import load_iris, load_breast_cancer
 from sklearn.model_selection import train_test_split
 from keras.utils.np_utils import to_categorical
+from sklearn.utils import shuffle
 
 from src.const import *
 
@@ -12,7 +13,7 @@ from src.const import *
 
 
 def get_data(data_set, batch_format):
-    if data_set is "starcraft":
+    if data_set == "starcraft":
         csv_dict = read_csv("data/train.csv")
 
         players_dict, val_players_dict = split_training_set(csv_dict, VALIDATION_SPLIT)
@@ -23,7 +24,11 @@ def get_data(data_set, batch_format):
         else:
             x_train, y_train, _ = csv_set_to_keras_batch(players_dict)
             x_test, y_test, _ = csv_set_to_keras_batch(val_players_dict)
-    elif data_set is "creditcard":
+
+        # shuffle train set
+        x_train, y_train = shuffle(x_train, y_train, random_state=6)
+
+    elif data_set == "creditcard":
         df = pd.read_csv("data/creditcard.csv", header=0)
         data = df.drop('Class', axis=1).values
         target = df.get('Class').values
@@ -52,13 +57,13 @@ def get_data(data_set, batch_format):
         y_test = y_test_small
 
         # set the batch to a keras one if needed
-        if batch_format is "keras":
+        if batch_format == "keras":
             y_train = to_categorical(y_train)
             y_test = to_categorical(y_test)
     else:
-        if data_set is "iris":
+        if data_set == "iris":
             data = load_iris()
-        elif data_set is "cancer":
+        elif data_set == "cancer":
             data = load_breast_cancer()
         else:
             raise ValueError("%s data set is not implemented" % data_set)

@@ -42,11 +42,11 @@ def knn(data_set, n_neighbors_values=(5,), p_values=(2,), training_sizes=(-1,)):
 
 
 if __name__ == "__main__":
-    data_set_name = "creditcard"
+    data_set_name = "starcraft"
     df, dd, ddi = knn(data_set_name,
                       n_neighbors_values=range(1, 15, 1),
                       p_values=range(1, 6),
-                      training_sizes=range(10000, 210001, 25000))
+                      training_sizes=range(500, 2001, 500))
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/knn_" + data_set_name + ".csv")
