@@ -49,7 +49,7 @@ if __name__ == "__main__":
     data_set_name = "starcraft"
     df, dd, ddi = tree(data_set_name,
                        max_depth_values=list(range(1, 21, 5)) + list(range(23, 36, 2)) + [37, 40, 45],
-                       min_samples_split_values=range(2, 20, 5),
+                       min_samples_split_values=range(2, 23, 5),
                        training_sizes=range(500, 2001, 500))
     if not os.path.exists("stats"):
         os.makedirs("stats")
