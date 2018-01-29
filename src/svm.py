@@ -45,9 +45,15 @@ def svm(data_set, c_values=(1.0,), kernel_values=('rbf',), trainning_size=(-1,))
 if __name__ == "__main__":
     data_set_name = "creditcard"
     df, dd, ddi = svm(data_set_name,
-                      c_values=range(1, 5, 1),
-                      kernel_values=["rbf"],
-                      trainning_size=[-1])
+                      c_values=np.array(range(2, 20, 2)) / 10,
+                      kernel_values=["rbf", "linear", "poly", "sigmoid"],
+                      trainning_size=range(10000, 210001, 50000)
+                      )
+    # df, dd, ddi = svm(data_set_name,
+    #                   c_values=np.array(range(2, 20, 2)) / 10,
+    #                   kernel_values=["rbf", "linear", "poly", "sigmoid"],
+    #                   trainning_size=range(500, 2000, 500)
+    #                   )
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/svm_" + data_set_name + ".csv")
