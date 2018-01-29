@@ -57,9 +57,9 @@ if __name__ == "__main__":
     #                     min_sample_split_values=range(2, 22, 5),
     #                     trainning_sizes=range(10000, 210000, 50000))
     df, dd, ddi = boost(data_set_name,
-                        max_depth_values=range(1, 41, 5),
+                        max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 5)),
                         n_estimators_values=range(1, 201, 50),
-                        min_sample_split_values=range(2, 22, 5),
+                        min_sample_split_values=range(2, 18, 3),
                         trainning_sizes=range(500, 2001, 500))
     if not os.path.exists("stats"):
         os.makedirs("stats")
