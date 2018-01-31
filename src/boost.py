@@ -50,17 +50,17 @@ def boost(data_set, max_depth_values=(5,), n_estimators_values=(100,), min_sampl
 
 
 if __name__ == "__main__":
-    data_set_name = "starcraft"
-    # df, dd, ddi = boost(data_set_name,
-    #                     max_depth_values=range(1, 10, 2),
-    #                     n_estimators_values=range(10, 200, 20),
-    #                     min_sample_split_values=range(2, 22, 5),
-    #                     trainning_sizes=range(10000, 210000, 50000))
+    data_set_name = "creditcard"
     df, dd, ddi = boost(data_set_name,
-                        max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 5)),
-                        n_estimators_values=range(1, 201, 50),
-                        min_sample_split_values=range(2, 18, 3),
-                        trainning_sizes=range(500, 2001, 500))
+                        max_depth_values=[1, 2, 3] + list(range(4, 11, 3)) + [15, 20],
+                        n_estimators_values=range(1, 201, 25),
+                        min_sample_split_values=range(2, 33, 5),
+                        trainning_sizes=range(10000, 210001, 50000))
+    # df, dd, ddi = boost(data_set_name,
+    #                     max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 5)),
+    #                     n_estimators_values=range(1, 201, 50),
+    #                     min_sample_split_values=range(2, 18, 3),
+    #                     trainning_sizes=range(500, 2001, 500))
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/boost_" + data_set_name + ".csv")
