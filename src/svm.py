@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import pickle
 from sklearn.svm import SVC
+import time
 
 from src.utils import get_data
 from src.const import *
@@ -24,8 +25,12 @@ def svm(data_set, c_values=(1.0,), kernel_values=('rbf',), trainning_size=(-1,))
             for train_limit in trainning_size:
                 clf = SVC(C=c,
                           kernel=kernel)
+                print("fit for:", c, kernel, train_limit)
+                start_time = time.time()
                 clf.fit(X=np.array(x_train[:train_limit]),
                         y=np.array(y_train[:train_limit]).ravel())
+                duration = time.time() - start_time
+                print(duration)
                 train_score = clf.score(X=np.array(x_train[:train_limit]),
                                         y=np.array(y_train[:train_limit]))
                 test_score = clf.score(X=x_test,
@@ -43,17 +48,17 @@ def svm(data_set, c_values=(1.0,), kernel_values=('rbf',), trainning_size=(-1,))
 
 
 if __name__ == "__main__":
-    data_set_name = "starcraft"
+    data_set_name = "creditcard"
+    df, dd, ddi = svm(data_set_name,
+                      c_values=(0.2, 1.6, 1.0, 1.4, 1.8),
+                      kernel_values=["rbf", "linear", "poly", "sigmoid"],
+                      trainning_size=range(1000, 11001, 2500)
+                      )
     # df, dd, ddi = svm(data_set_name,
     #                   c_values=np.array(range(2, 20, 2)) / 10,
     #                   kernel_values=["rbf", "linear", "poly", "sigmoid"],
-    #                   trainning_size=range(10000, 210001, 50000)
+    #                   trainning_size=range(500, 2001, 500)
     #                   )
-    df, dd, ddi = svm(data_set_name,
-                      c_values=np.array(range(2, 20, 2)) / 10,
-                      kernel_values=["rbf", "linear", "poly", "sigmoid"],
-                      trainning_size=range(500, 2001, 500)
-                      )
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/svm_" + data_set_name + ".csv")
