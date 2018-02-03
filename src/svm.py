@@ -51,7 +51,7 @@ if __name__ == "__main__":
     data_set_name = "creditcard"
     df, dd, ddi = svm(data_set_name,
                       c_values=(0.2, 1.6, 1.0, 1.4, 1.8),
-                      kernel_values=["rbf", "linear", "poly", "sigmoid"],
+                      kernel_values=["rbf", "linear", "sigmoid"],
                       trainning_size=range(1000, 11001, 2500)
                       )
     # df, dd, ddi = svm(data_set_name,
