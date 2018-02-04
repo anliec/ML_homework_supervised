@@ -65,4 +65,4 @@ Each one generate the plot for the given machine learning method from the associ
  
 If you do not already have them installed, it can be done quickly using pip:
 
-    pip3 install keras sklearn pandas matplotlib seaborn numpy 
+    pip3 install keras sklearn pandas matplotlib seaborn numpy jupyter
