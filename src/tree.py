@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 import pickle
 import os
+import sys
 
 from src.utils import get_data
 from src.const import *
@@ -46,11 +47,26 @@ def tree(data_set, max_depth_values=(None,), min_samples_split_values=(2,), trai
 
 
 if __name__ == "__main__":
-    data_set_name = "starcraft"
-    df, dd, ddi = tree(data_set_name,
-                       max_depth_values=list(range(1, 21, 5)) + list(range(23, 36, 2)) + [37, 40, 45],
-                       min_samples_split_values=range(2, 23, 5),
-                       training_sizes=range(500, 2001, 500))
+    if len(sys.argv) != 2:
+        print("Wrong command line argument !")
+        print()
+        print("Expected call is:", sys.argv[0], "[dataset]")
+        print("dataset: one of \"creditcard\" or \"starcraft\"")
+        exit(1)
+    data_set_name = sys.argv[1]
+    if data_set_name == "creditcard":
+        df, dd, ddi = tree(data_set_name,
+                           max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 10)),
+                           min_samples_split_values=range(2, 18, 5),
+                           training_sizes=range(10000, 210001, 50000))
+    elif data_set_name == "starcraft":
+        df, dd, ddi = tree(data_set_name,
+                           max_depth_values=list(range(1, 21, 5)) + list(range(23, 36, 2)) + [37, 40, 45],
+                           min_samples_split_values=range(2, 23, 5),
+                           training_sizes=range(500, 2001, 500))
+    else:
+        print("unknow dataset:", data_set_name)
+        exit(1)
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/tree_" + data_set_name + ".csv")

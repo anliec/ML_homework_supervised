@@ -114,3 +114,13 @@ ENV/
 *.7z
 *.sh
 *.backup
+*.toc
+*.out
+*.log
+*.aux
+*.fls
+*.lyx*
+*_latexmk
+*~
+*.dvi
+*.gz

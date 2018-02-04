@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 import pickle
+import sys
 from sklearn.neighbors import KNeighborsClassifier
 
 from src.utils import get_data
@@ -42,11 +43,26 @@ def knn(data_set, n_neighbors_values=(5,), p_values=(2,), training_sizes=(-1,)):
 
 
 if __name__ == "__main__":
-    data_set_name = "starcraft"
-    df, dd, ddi = knn(data_set_name,
-                      n_neighbors_values=range(1, 15, 1),
-                      p_values=range(1, 6),
-                      training_sizes=range(500, 2001, 500))
+    if len(sys.argv) != 2:
+        print("Wrong command line argument !")
+        print()
+        print("Expected call is:", sys.argv[0], "[dataset]")
+        print("dataset: one of \"creditcard\" or \"starcraft\"")
+        exit(1)
+    data_set_name = sys.argv[1]
+    if data_set_name == "creditcard":
+        df, dd, ddi = knn(data_set_name,
+                          n_neighbors_values=range(1, 15, 1),
+                          p_values=range(1, 6),
+                          training_sizes=range(10000, 210001, 25000))
+    elif data_set_name == "starcraft":
+        df, dd, ddi = knn(data_set_name,
+                          n_neighbors_values=range(1, 15, 1),
+                          p_values=range(1, 6),
+                          training_sizes=range(500, 2001, 500))
+    else:
+        print("unknow dataset:", data_set_name)
+        exit(1)
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/knn_" + data_set_name + ".csv")

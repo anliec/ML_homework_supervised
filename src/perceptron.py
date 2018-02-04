@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 import pickle
+import sys
 
 from keras.layers import Dense, Activation, BatchNormalization, InputLayer, Dropout
 from keras.models import Sequential
@@ -91,23 +92,34 @@ def perceptron(data_set, number_of_epoch, hidden_neurons=((NUMBER_HIDDEN_NEURONS
 
 
 if __name__ == "__main__":
-    data_set_name = "starcraft"
-    # dff, tt, tti = perceptron(data_set_name,
-    #                           number_of_epoch=600,
-    #                           hidden_neurons=((), (15,), (10,), (5,), (15, 5), (10, 5)),
-    #                           use_batch_norm_values=(True, False),
-    #                           optimizer_values=('rmsprop',),
-    #                           activation_values=('sigmoid', 'relu', 'linear', 'selu'),
-    #                           training_sizes=range(10000, 210000, 50000)
-    #                           )
-    dff, tt, tti = perceptron(data_set_name,
-                              number_of_epoch=600,
-                              hidden_neurons=((), (35,), (25,), (15,), (10,), (30, 10), (20, 10)),
-                              use_batch_norm_values=(True, False),
-                              optimizer_values=('rmsprop', 'adam'),
-                              activation_values=('sigmoid', 'relu', 'linear', 'selu'),
-                              training_sizes=range(1000, 2001, 190)
-                              )
+    if len(sys.argv) != 2:
+        print("Wrong command line argument !")
+        print()
+        print("Expected call is:", sys.argv[0], "[dataset]")
+        print("dataset: one of \"creditcard\" or \"starcraft\"")
+        exit(1)
+    data_set_name = sys.argv[1]
+    if data_set_name == "creditcard":
+        dff, tt, tti = perceptron(data_set_name,
+                                  number_of_epoch=600,
+                                  hidden_neurons=((), (15,), (10,), (5,), (15, 5), (10, 5)),
+                                  use_batch_norm_values=(True, False),
+                                  optimizer_values=('rmsprop',),
+                                  activation_values=('sigmoid', 'relu', 'linear', 'selu'),
+                                  training_sizes=range(10000, 210000, 50000)
+                                  )
+    elif data_set_name == "starcraft":
+        dff, tt, tti = perceptron(data_set_name,
+                                  number_of_epoch=600,
+                                  hidden_neurons=((), (35,), (25,), (15,), (10,), (30, 10), (20, 10)),
+                                  use_batch_norm_values=(True, False),
+                                  optimizer_values=('rmsprop', 'adam'),
+                                  activation_values=('sigmoid', 'relu', 'linear', 'selu'),
+                                  training_sizes=range(1000, 2001, 190)
+                                  )
+    else:
+        print("unknow dataset:", data_set_name)
+        exit(1)
     if not os.path.exists("stats"):
         os.makedirs("stats")
     dff.to_csv(path_or_buf="stats/per_" + data_set_name + ".csv")

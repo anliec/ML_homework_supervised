@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import pickle
 from sklearn.ensemble import GradientBoostingClassifier
+import sys
 
 from src.utils import get_data
 from src.const import *
@@ -50,17 +51,28 @@ def boost(data_set, max_depth_values=(5,), n_estimators_values=(100,), min_sampl
 
 
 if __name__ == "__main__":
-    data_set_name = "starcraft"
-    # df, dd, ddi = boost(data_set_name,
-    #                     max_depth_values=[1, 2, 3] + list(range(4, 11, 3)) + [15, 20],
-    #                     n_estimators_values=range(1, 201, 25),
-    #                     min_sample_split_values=range(2, 33, 5),
-    #                     trainning_sizes=range(10000, 210001, 50000))
-    df, dd, ddi = boost(data_set_name,
-                        max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 5)),
-                        n_estimators_values=range(1, 201, 50),
-                        min_sample_split_values=range(2, 18, 3),
-                        trainning_sizes=range(500, 2001, 500))
+    if len(sys.argv) != 2:
+        print("Wrong command line argument !")
+        print()
+        print("Expected call is:", sys.argv[0], "[dataset]")
+        print("dataset: one of \"creditcard\" or \"starcraft\"")
+        exit(1)
+    data_set_name = sys.argv[1]
+    if data_set_name == "creditcard":
+        df, dd, ddi = boost(data_set_name,
+                            max_depth_values=[1, 2, 3] + list(range(4, 11, 3)) + [15, 20],
+                            n_estimators_values=range(1, 201, 25),
+                            min_sample_split_values=range(2, 33, 5),
+                            trainning_sizes=range(10000, 210001, 50000))
+    elif data_set_name == "starcraft":
+        df, dd, ddi = boost(data_set_name,
+                            max_depth_values=list(range(1, 10, 2)) + list(range(10, 41, 5)),
+                            n_estimators_values=range(1, 201, 50),
+                            min_sample_split_values=range(2, 18, 3),
+                            trainning_sizes=range(500, 2001, 500))
+    else:
+        print("unknow dataset:", data_set_name)
+        exit(1)
     if not os.path.exists("stats"):
         os.makedirs("stats")
     df.to_csv(path_or_buf="stats/boost_" + data_set_name + ".csv")
