@@ -10,6 +10,9 @@ from keras.models import Sequential
 from src.utils import *
 
 
+NUMBER_HIDDEN_NEURONS = 36
+
+
 def get_model(feature_count, class_count, hidden_layer, use_batch_norm=True, optimizer='rmsprop', activation='sigmoid'):
     return_model = Sequential()
     return_model.add(InputLayer(input_shape=(feature_count,)))
@@ -109,21 +112,29 @@ if __name__ == "__main__":
                                   training_sizes=range(10000, 210000, 50000)
                                   )
     elif data_set_name == "starcraft":
+        # dff, tt, tti = perceptron(data_set_name,
+        #                           number_of_epoch=600,
+        #                           hidden_neurons=((), (35,), (25,), (15,), (10,), (30, 10), (20, 10)),
+        #                           use_batch_norm_values=(True, False),
+        #                           optimizer_values=('rmsprop', 'adam'),
+        #                           activation_values=('sigmoid', 'relu', 'linear', 'selu'),
+        #                           training_sizes=range(1000, 2001, 190)
+        #                           )
         dff, tt, tti = perceptron(data_set_name,
-                                  number_of_epoch=600,
-                                  hidden_neurons=((), (35,), (25,), (15,), (10,), (30, 10), (20, 10)),
-                                  use_batch_norm_values=(True, False),
+                                  number_of_epoch=800,
+                                  hidden_neurons=((2, ),),
+                                  use_batch_norm_values=(True,),
                                   optimizer_values=('rmsprop', 'adam'),
-                                  activation_values=('sigmoid', 'relu', 'linear', 'selu'),
-                                  training_sizes=range(1000, 2001, 190)
+                                  activation_values=('sigmoid', 'relu', 'selu'),
+                                  training_sizes=(-1,)
                                   )
     else:
-        print("unknow dataset:", data_set_name)
-        exit(1)
+        raise ValueError("unknow dataset:", data_set_name)
     if not os.path.exists("stats"):
         os.makedirs("stats")
-    dff.to_csv(path_or_buf="stats/per_" + data_set_name + ".csv")
-    with open("stats/per_" + data_set_name + "_dict.pikle", 'wb') as handle:
-        pickle.dump(tt, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    with open("stats/per_" + data_set_name + "_dict_indexes.pikle", 'wb') as handle:
-        pickle.dump(tti, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    dff.to_csv(path_or_buf="stats/per_test_" + data_set_name + ".csv")
+    # dff.to_csv(path_or_buf="stats/per_" + data_set_name + ".csv")
+    # with open("stats/per_" + data_set_name + "_dict.pikle", 'wb') as handle:
+    #     pickle.dump(tt, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    # with open("stats/per_" + data_set_name + "_dict_indexes.pikle", 'wb') as handle:
+    #     pickle.dump(tti, handle, protocol=pickle.HIGHEST_PROTOCOL)

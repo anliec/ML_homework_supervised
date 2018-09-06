@@ -224,9 +224,9 @@ def read_csv(file_name, read_all=False, time_limit=GAME_TIME_STEP_LIMIT):
             ordered_action_first_time_dict = OrderedDict(sorted(action_first_time_dict.items()))
 
             # compute additional information
-            relative_line_position = line_number / number_of_line
-            apm = len(action_list) / (current_timestep + 1)  # + 1 to prevent division by 0
-            other_info = (relative_line_position, apm, max_ap5s)
+            relative_line_position = line_number  # / number_of_line
+            mapm = len(action_list) * 1000 / (current_timestep + 1)  # + 1 to prevent division by 0
+            other_info = (relative_line_position, mapm, max_ap5s)
 
             if current_timestep < 60 and not read_all:
                 pass
@@ -242,8 +242,8 @@ def split_training_set(source_dict, test_to_train_ratio=0.1):
     for player_name, player_game in source_dict.items():
         number_of_games = len(player_game)
         split_index = number_of_games - int(number_of_games * test_to_train_ratio) - 2
-        train_game = player_game[0:split_index]
-        test_game = player_game[split_index:-1]
+        train_game = player_game[:split_index]
+        test_game = player_game[split_index:]
         train_dict[player_name] = train_game
         test_dict[player_name] = test_game
     return train_dict, test_dict
